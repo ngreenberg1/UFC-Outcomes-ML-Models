@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import models, layers
+from tensorflow.keras.callbacks import ModelCheckpoint
 import time
 
 
@@ -35,20 +36,24 @@ model.add(layers.Dense(1, activation='sigmoid'))  # For binary classification (w
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-epochs = 10
+epochs = 15
 
 start_time = time.time()
 
-model.fit(X_train, y_train, epochs=epochs, validation_data=(X_validate, y_validate))
+checkpoint = ModelCheckpoint("cnn_model.h5", save_best_only=True, monitor= 'val_loss', mode='min', verbose=1)
+model.fit(X_train, y_train, epochs=epochs, validation_data=(X_validate, y_validate), callbacks = [checkpoint])
+
 print()
 end_time = time.time()
 training_time = end_time - start_time
-print(f"Training time: {training_time} seconds")
 print()
 
-test_loss, test_acc = model.evaluate(X_test, y_test)
+best_model = models.load_model("cnn_model.h5")
+
+test_loss, test_acc = best_model.evaluate(X_test, y_test)
 
 print(f'Test accuracy: {test_acc}')
+print(print(f"Training time: {training_time} seconds"))
 
 
 

@@ -20,7 +20,6 @@ X_train, X_validate, y_train, y_validate = train_test_split(X_train, y_train, te
 # Check the number of available GPUs
 gpus = tf.config.experimental.list_physical_devices('GPU')
 num_gpus = len(gpus)
-print(f"Number of GPUs available: {num_gpus}")
 
 
 # Define the strategy
@@ -41,15 +40,14 @@ with strategy.scope():
 # Measure the time taken for training
 start_time = time.time()
 
-epochs = 10
+epochs = 15
 model.fit(X_train, y_train, epochs=epochs, validation_data=(X_validate, y_validate))
 
-print()
 end_time = time.time()
 training_time = end_time - start_time
-print(f"Training time: {training_time} seconds")
-print()
 
 test_loss, test_acc = model.evaluate(X_test, y_test)
 
 print(f'Test accuracy: {test_acc}')
+print(f"Number of GPUs available: {num_gpus}")
+print(f"Training time: {training_time} seconds")

@@ -13,6 +13,11 @@ y = dataframe['Diabetes_binary']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.15, random_state=42)
 X_train, X_validate, y_train, y_validate = train_test_split(X_train, y_train, test_size=.2, random_state=42)
 
+# Reshape data for Conv1D layer (add a new axis for the channels)
+X_train = X_train.values.reshape(X_train.shape[0], X_train.shape[1], 1)
+X_validate = X_validate.values.reshape(X_validate.shape[0], X_validate.shape[1], 1)
+X_test = X_test.values.reshape(X_test.shape[0], X_test.shape[1], 1)
+
 # Check the number of available GPUs
 gpus = tf.config.experimental.list_physical_devices('GPU')
 num_gpus = len(gpus)
